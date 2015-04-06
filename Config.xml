@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+   <widget xmlns   = "http://www.w3.org/ns/widgets"
+       xmlns:gap   = "http://phonegap.com/ns/1.0"
+       id          = "com.designinglives.sfmap"
+       versionCode = "10" 
+       version     = "1.0.0" >
+
+   <!-- versionCode is optional and Android only -->
+
+   <name>San Francisco Map</name>
+
+   <description>
+	   San Francisco map tool
+   </description>
+
+   <author href="https://designinglives.net" email="info@designinglives.net">
+       Designinglives
+   </author>
+   
+	<gap:platform name="android" />
+	
+	<icon src="assets/android/drawable-ldpi/appicon.png" gap:platform="android" gap:density="ldpi" />
+	<icon src="assets/android/drawable-mdpi/appicon.png" gap:platform="android" gap:density="mdpi" />
+	<icon src="assets/android/drawable-hdpi/appicon.png" gap:platform="android" gap:density="hdpi" />
+	<icon src="assets/android/drawable-xhdpi/appicon.png" gap:platform="android" gap:density="xhdpi" />
+	<icon src="assets/android/drawable-xxhdpi/appicon.png" gap:platform="android" gap:density="xxhdpi" />
+	<icon src="assets/android/drawable-xxxhdpi/appicon.png" gap:platform="android" gap:density="xxxhdpi" />
+	
+	<gap:splash src="assets/android/res-long-port-ldpi/default.png" gap:platform="android" gap:density="ldpi" />
+	<gap:splash src="assets/android/res-long-port-mdpi/default.png" gap:platform="android" gap:density="mdpi" />
+	<gap:splash src="assets/android/res-long-port-hdpi/default.png" gap:platform="android" gap:density="hdpi" />
+	<gap:splash src="assets/android/res-long-port-xhdpi/default.png" gap:platform="android" gap:density="xhdpi" />
+	<gap:splash src="assets/android/res-long-port-xxhdpi/default.png" gap:platform="android" gap:density="xxhdpi" />
+
+</widget>
