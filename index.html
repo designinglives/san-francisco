@@ -7,6 +7,7 @@
     <link href="assets/css/bootstrap.css" rel="stylesheet" media="screen">
     <link href="assets/css/main.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" href="assets/css/whhg.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
     <style>
 	 	.side-bar {
@@ -24,6 +25,21 @@
 		
 		.side-bar .logo img {
 			width: 180px;
+		}
+		
+		#travelType li {
+			opacity: 0.3;
+			color: #434343;
+			padding: 6px 10px 0 4px;
+			cursor: pointer;
+		}
+		
+		#travelType li i {
+			font-size: 17px;
+		}
+		
+		#travelType li.active {
+			opacity: 1;
 		}
     </style>
     
@@ -125,12 +141,16 @@
             </div>
               <!--/Map open (for adaptive)-->
             <!--tooltip-->
-            <!--<div class="jumbotron innerpage">
+            <div class="jumbotron innerpage">
                 <div class="container">
-                    <h2>Hello mattew!</h2>
-
+						  <ul style="list-style: none;" id="travelType">
+							  <li style="float: left;" class="active"><i class="fa fa-paw travelType" id="walking"></i></li>
+							  <li style="float: left;"><i class="fa fa-bicycle travelType" id="bicyling"></i></li>
+							  <li style="float: left;"><i class="fa fa-car travelType" id="driving"></i></li>
+							  <li style="float: left;"><i class="fa fa-bus travelType" id="transit"></i></li>
+						  </ul>
                 </div>
-            </div>-->
+            </div>
             <!--/tooltip-->
             <!--you can-->
             <div class="row">
@@ -169,6 +189,6 @@
     <script type="text/javascript" src="assets/js/bootstrap.js"></script>
     <script type="text/javascript" src="assets/js/owl.carousel.js"></script>
     <script type="text/javascript" src="assets/js/pxgradient-1.0.2.jquery.js"></script>
-    <script type="text/javascript" src="http://sf.designinglives.net/assets/js/main.js"></script>
+    <script type="text/javascript" src="http://sf.designinglives.net/assets/js/main.js?ver=1.04"></script>
 </body>
 </html>
