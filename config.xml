@@ -6,7 +6,7 @@
         id        = "com.designinglives.sanfranmap"
         version   = "1.0.0">
 
-    <name>SF Map</name>
+    <name>SF Mapee</name>
 
     <description>
         Hello World sample application that responds to the deviceready event.
