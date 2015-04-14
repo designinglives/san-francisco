@@ -95,9 +95,9 @@ $.ajax({
 	type: 'GET',
 	cache: false,
 	timeout: 30000,
-	success: function($data) {
-		$data = $.parseJSON($data);
-		centerPoint = new google.maps.LatLng($data[0]['latitude'], $data[0]['longitude']);
+	success: function(data) {
+		data = $.parseJSON(data);
+		centerPoint = new google.maps.LatLng(data[0]['latitude'], data[0]['longitude']);
 	}
 });
 console.log(centerPoint);
@@ -136,12 +136,14 @@ var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions)
 var cook = 'assets/img/icon/01.png';
 var cook2 = 'assets/img/icon/02.png';
 //variables
+var travelType = 'walking';
 var point;
 var marker;
 var cpoint;
 var cmarker;
 var selectedPoint;
 var geolocate;
+var selectedMarker;
 var directionsService = new google.maps.DirectionsService();
 var directionsDisplay = new google.maps.DirectionsRenderer();
 var directionsService2 = new google.maps.DirectionsService();
@@ -160,15 +162,15 @@ $.ajax({
 	type: 'GET',
 	cache: false,
 	timeout: 30000,
-	success: function($data) {
-		$data = $.parseJSON($data);
-		cpoint = new google.maps.LatLng($data[0]['latitude'], $data[0]['longitude']);
+	success: function(data) {
+		data = $.parseJSON(data);
+		cpoint = new google.maps.LatLng(data[0]['latitude'], data[0]['longitude']);
 		cmarker = new google.maps.Marker({
 			position: cpoint,
 			map: map,
-			category: $data[0]['category'],
-			icon: $data[0]['category_image'],
-			title: $data[0]['title']
+			category: data[0]['category'],
+			icon: data[0]['category_image'],
+			title: data[0]['title']
 		});
 		selectedPoint = 'marker';
 	}
@@ -179,9 +181,9 @@ $.ajax({
 	type: 'GET',
 	cache: false,
 	timeout: 30000,
-	success: function($data) {
-		$data = $.parseJSON($data);
-		$.each($data, function($index, $value) {
+	success: function(data) {
+		data = $.parseJSON(data);
+		$.each(data, function($index, $value) {
 			point = new google.maps.LatLng($value['latitude'], $value['longitude']);
 			marker = new google.maps.Marker({
 				position: point,
@@ -190,44 +192,59 @@ $.ajax({
 				icon: $value['category_image'],
 				title: $value['title']
 			});
+			
 			google.maps.event.addListener(marker, 'click', function() {
-				getDirections(this);
+				selectedMarker = this;
+				
+				getDirections(selectedMarker);
 			});
 		});
 	}
 });
-/*
-	    {exp:channel:entries channel="markers" category="not 1"}
-	    
-		    //positions
-		    point = new google.maps.LatLng({latitude}, {longitude});
-		
-			 //markers
-		    marker = new google.maps.Marker({
-		        position: point,
-		        map: map,
-		        category: '{categories}{category_name}{/categories}',
-		        icon: '{categories}{category_image}{/categories}',
-		        title: "{title}"
-		    });
-	    
-			 google.maps.event.addListener(marker, 'click', function(){
-			    getDirections(this);
-		    });
-	    {/exp:channel:entries}*/
+
 function getDirections(destination) {
 	if (selectedPoint == 'marker') {
 		var start = cmarker.getPosition();
 	} else {
 		var start = selectedPoint.getPosition();
 	}
-	console.log(start);
+	
 	var dest = destination.getPosition();
-	var request = {
-		origin: start,
-		destination: dest,
-		travelMode: google.maps.TravelMode.WALKING
-	};
+	
+	switch(travelType) {
+		case 'walking': 
+			var request = {
+				origin: start,
+				destination: dest,
+				travelMode: google.maps.TravelMode.WALKING
+			};
+		break;
+		
+		case 'bicyling': 
+			var request = {
+				origin: start,
+				destination: dest,
+				travelMode: google.maps.TravelMode.BICYCLING
+			};
+		break;
+		
+		case 'driving': 
+			var request = {
+				origin: start,
+				destination: dest,
+				travelMode: google.maps.TravelMode.DRIVING
+			};
+		break;
+		
+		case 'transit': 
+			var request = {
+				origin: start,
+				destination: dest,
+				travelMode: google.maps.TravelMode.TRANSIT
+			};
+		break;
+	}
+	
 	directionsService.route(request, function(result, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(result);
@@ -276,7 +293,18 @@ $('#map_open').click(function() {
 	$('.side-bar').animate({
 		marginLeft: '-190px'
 	});
-}); /* Get current address */
+}); 
+
+/* Change travel type */
+$('.travelType').click(function(){
+	$('#travelType .active').removeClass('active');
+	travelType = $(this).attr('id');
+	$(this).parent().addClass('active');
+	
+	getDirections(selectedMarker);
+});
+
+/* Get current address */
 $('#determine').click(function() {
 	navigator.geolocation.getCurrentPosition(function(position) {
 		geolocate = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
