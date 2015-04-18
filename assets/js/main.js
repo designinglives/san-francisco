@@ -143,6 +143,7 @@ var cpoint;
 var cmarker;
 var selectedPoint;
 var geolocate;
+var markersArray = [];
 var selectedMarker;
 var directionsService = new google.maps.DirectionsService();
 var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -168,6 +169,7 @@ $.ajax({
 		cmarker = new google.maps.Marker({
 			position: cpoint,
 			map: map,
+			optimized: false, 
 			category: data[0]['category'],
 			icon: data[0]['category_image'],
 			title: data[0]['title']
@@ -188,10 +190,13 @@ $.ajax({
 			marker = new google.maps.Marker({
 				position: point,
 				map: map,
+				optimized: false, 
 				category: $value['category'],
 				icon: $value['category_image'],
 				title: $value['title']
 			});
+			
+			markersArray.push(marker);
 			
 			google.maps.event.addListener(marker, 'click', function() {
 				selectedMarker = this;
@@ -281,6 +286,46 @@ function getDirections(destination) {
 	});
 }
 
+$('.gradientmenu').click(function(){
+	console.log('clear');
+	
+	for (var i = 0; i < markersArray.length; i++ ) {
+     markersArray[i].setMap(null);
+   }
+   
+   markersArray.length = 0;
+   
+   $.ajax({
+		url: "http://sf.designinglives.net/ajax/getMarkers/category/"+$(this).attr('data-category'),
+		async: false,
+		type: 'GET',
+		cache: false,
+		timeout: 30000,
+		success: function(data) {
+			data = $.parseJSON(data);
+			$.each(data, function($index, $value) {
+				point = new google.maps.LatLng($value['latitude'], $value['longitude']);
+				marker = new google.maps.Marker({
+					position: point,
+					map: map,
+					optimized: false, 
+					category: $value['category'],
+					icon: $value['category_image'],
+					title: $value['title']
+				});
+				
+				markersArray.push(marker);
+				
+				google.maps.event.addListener(marker, 'click', function() {
+					selectedMarker = this;
+					
+					getDirections(selectedMarker);
+				});
+			});
+		}
+	});
+});
+
 function secondsTimeSpanToHMS(s) {
 	var h = Math.floor(s / 3600); //Get whole hours
 	s -= h * 3600;
@@ -311,6 +356,7 @@ $('#determine').click(function() {
 		selectedPoint = new google.maps.Marker({
 			position: geolocate,
 			map: map,
+			optimized: false, 
 			category: cook,
 			icon: cook,
 			title: "Current Point"
