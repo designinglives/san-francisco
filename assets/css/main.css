@@ -453,10 +453,15 @@ h5.cat {
 }
 /*map*/
 .map {
-    min-width: 100%;
+    width: 100%;
     min-height: 100%;
     background: #ebe6dc;
     position: fixed !important;
+}
+
+.map.opened {
+	width: calc(100% - 290px);
+	margin-left: 290px;
 }
 
 

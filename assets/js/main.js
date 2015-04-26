@@ -1,94 +1,12 @@
-var gmapFreshStyle = [{
-	"featureType": "landscape.man_made",
-	"elementType": "geometry",
-	"stylers": [{
-		"color": "#f7f1df"
-	}]
-}, {
-	"featureType": "landscape.natural",
-	"elementType": "geometry",
-	"stylers": [{
-		"color": "#d0e3b4"
-	}]
-}, {
-	"featureType": "landscape.natural.terrain",
-	"elementType": "geometry",
-	"stylers": [{
-		"visibility": "off"
-	}]
-}, {
-	"featureType": "poi",
-	"elementType": "labels",
-	"stylers": [{
-		"visibility": "off"
-	}]
-}, {
-	"featureType": "poi.business",
-	"elementType": "all",
-	"stylers": [{
-		"visibility": "off"
-	}]
-}, {
-	"featureType": "poi.medical",
-	"elementType": "geometry",
-	"stylers": [{
-		"color": "#fbd3da"
-	}]
-}, {
-	"featureType": "poi.park",
-	"elementType": "geometry",
-	"stylers": [{
-		"color": "#bde6ab"
-	}]
-}, {
-	"featureType": "road",
-	"elementType": "geometry.stroke",
-	"stylers": [{
-		"visibility": "off"
-	}]
-}, {
-	"featureType": "road",
-	"elementType": "labels",
-	"stylers": [{
-		"visibility": "off"
-	}]
-}, {
-	"featureType": "road.highway",
-	"elementType": "geometry.fill",
-	"stylers": [{
-		"color": "#ffe15f"
-	}]
-}, {
-	"featureType": "road.highway",
-	"elementType": "geometry.stroke",
-	"stylers": [{
-		"color": "#efd151"
-	}]
-}, {
-	"featureType": "road.arterial",
-	"elementType": "geometry.fill",
-	"stylers": [{
-		"color": "#ffffff"
-	}]
-}, {
-	"featureType": "road.local",
-	"elementType": "geometry.fill",
-	"stylers": [{
-		"color": "black"
-	}]
-}, {
-	"featureType": "transit.station.airport",
-	"elementType": "geometry.fill",
-	"stylers": [{
-		"color": "#cfb2db"
-	}]
-}, {
-	"featureType": "water",
-	"elementType": "geometry",
-	"stylers": [{
-		"color": "#a2daf2"
-	}]
-}]; // End of style array
+//Map Style
+var gmapFreshStyle=[{"featureType":"landscape.man_made","elementType":"geometry","stylers":[{"color":"#f7f1df"}]},{"featureType":"landscape.natural","elementType":"geometry","stylers":[{"color":"#d0e3b4"}]},{"featureType":"landscape.natural.terrain","elementType":"geometry","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"geometry","stylers":[{"color":"#fbd3da"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#bde6ab"}]},{"featureType":"road","elementType":"geometry.stroke","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffe15f"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"color":"#efd151"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"color":"black"}]},{"featureType":"transit.station.airport","elementType":"geometry.fill","stylers":[{"color":"#cfb2db"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#a2daf2"}]}]; // End of style array
+
+//Extend javascript library
+if (Number.prototype.toRadians === undefined) {
+	Number.prototype.toRadians = function() { return this * Math.PI / 180; };
+}
+
+//Get marker center point (appartment)
 $.ajax({
 	url: "http://sf.designinglives.net/index.php/ajax/getMarkers/category/1",
 	async: false,
@@ -100,7 +18,7 @@ $.ajax({
 		centerPoint = new google.maps.LatLng(data[0]['latitude'], data[0]['longitude']);
 	}
 });
-console.log(centerPoint);
+
 //Map parametrs
 var mapOptions = {
 	zoom: 14,
@@ -132,9 +50,11 @@ var mapOptions = {
 }
 //map
 var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
 //category
 var cook = 'assets/img/icon/01.png';
 var cook2 = 'assets/img/icon/02.png';
+
 //variables
 var travelType = 'walking';
 var point;
@@ -149,14 +69,15 @@ var directionsService = new google.maps.DirectionsService();
 var directionsDisplay = new google.maps.DirectionsRenderer();
 var directionsService2 = new google.maps.DirectionsService();
 var directionsDisplay2 = new google.maps.DirectionsRenderer();
+
+//Initialize the directions display event to the map
 directionsDisplay = new google.maps.DirectionsRenderer({
 	suppressMarkers: true
 });
+
 directionsDisplay.setMap(map);
-directionsDisplay2 = new google.maps.DirectionsRenderer({
-	suppressMarkers: true
-});
-directionsDisplay2.setMap(map);
+
+//Get center point for map (not center point)
 $.ajax({
 	url: "http://sf.designinglives.net/ajax/getMarkers/category/1",
 	async: false,
@@ -177,6 +98,8 @@ $.ajax({
 		selectedPoint = 'marker';
 	}
 });
+
+//Get all other points + add event on click
 $.ajax({
 	url: "http://sf.designinglives.net/ajax/getMarkers/no-category/1",
 	async: false,
@@ -250,23 +173,87 @@ function getDirections(destination) {
 		break;
 	}
 	
+	$('.side-bar').animate({
+		marginLeft: '50px'
+	});
+	
+	$margin = parseInt($('#glavmen').css('width')) + parseInt($('#cont').css('width'));
+	$width = parseInt($('body').css('width')) - $margin;
+	
+	$('#map_canvas').animate({
+		'width': $width+'px',
+		'margin-left': $margin+'px'
+	});
+	
 	directionsService.route(request, function(result, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(result);
 			$kilometers = result.routes[0].legs[0].distance.value / 1000
 			$('.title').html(destination.title);
+			
+			//Get first google image
 			$.getJSON("https://ajax.googleapis.com/ajax/services/search/images?callback=?", {
 				q: destination.title + ' san francisco',
 				v: '1.0'
 			}, function(data) {
-				$("#image").html('<img width="200px" src="' + data.responseData.results[0].url + '">');
+				$("#image").html('<img width="200px" src="' + decodeURIComponent(data.responseData.results[0].url) + '">');
+				
+				console.log(decodeURIComponent(data.responseData.results[0].url));
 			});
+			
+			//Get first link on google (to make sure we have a clickable link)
 			$.getJSON("https://ajax.googleapis.com/ajax/services/search/web?callback=?", {
 				q: destination.title + ' san francisco',
 				v: '1.0'
 			}, function(data) {
-				$('.title').html('<a target="_blank" href="' + data.responseData.results[0].url + '" title="' + data.responseData.results[0].content + '">' + destination.title + '</a>');
+				$('.title').html('<a target="_blank" href="' + decodeURIComponent(data.responseData.results[0].url) + '" title="' + data.responseData.results[0].content + '">' + destination.title + '</a>');
 			});
+			
+			//If category is food, get place details
+			var request = {
+		   	 query: destination.title+' San Francisco'
+		  	};
+  
+         service = new google.maps.places.PlacesService(map);
+		   service.textSearch(request, function(results, status) {
+			   if (status == google.maps.places.PlacesServiceStatus.OK) {
+				   //Display expensiveness
+					textPrice = '';
+				   
+				   if(results[0]['price_level']) {
+					   textPrice = '';
+
+					   for(var i=0; i<results[0]['price_level']; i++) {
+						   textPrice = textPrice+'&euro;';
+					   }
+					   
+					   textPrice = textPrice + ' - ';
+				   }
+				   
+				   $('.pricing').html(textPrice);
+			   	
+				   //Display rating
+					textRating = '';
+				   
+				   if(results[0]['rating']) {
+					   for(var i=0; i<Math.round(results[0]['rating']); i++) {
+						   textRating = textRating+'<i class="fa fa-star"></i>';
+					   }
+					   textRating = textRating+'<br><br>';
+				   }
+				   
+				   $('.rating').html(textRating);
+			   	
+			   	//Check if open now, else display hours
+			   	if(results[0]['opening_hours']['open_now']) {
+				   	console.log('open now');
+			   	} else {
+				   	console.log(results[0]['opening_hours']['weekday_text']);
+			   	}
+			   }
+ 		   });
+			
+			//Display meters or km's
 			if ($kilometers > 1) {
 				$('.total').html($kilometers.toFixed(2) + 'km - ' + secondsTimeSpanToHMS(result.routes[0].legs[0].duration.value));
 			} else {
@@ -281,14 +268,47 @@ function getDirections(destination) {
 			});
 		}
 	});
-	$('.side-bar').animate({
-		marginLeft: '50px'
-	});
 }
 
+$('.avatar').click(function(){
+	for (var i = 0; i < markersArray.length; i++ ) {
+     markersArray[i].setMap(null);
+   }
+   
+   markersArray.length = 0;
+   
+	$.ajax({
+		url: "http://sf.designinglives.net/ajax/getMarkers/no-category/1",
+		async: false,
+		type: 'GET',
+		cache: false,
+		timeout: 30000,
+		success: function(data) {
+			data = $.parseJSON(data);
+			$.each(data, function($index, $value) {
+				point = new google.maps.LatLng($value['latitude'], $value['longitude']);
+				marker = new google.maps.Marker({
+					position: point,
+					map: map,
+					optimized: false, 
+					category: $value['category'],
+					icon: $value['category_image'],
+					title: $value['title']
+				});
+				
+				markersArray.push(marker);
+				
+				google.maps.event.addListener(marker, 'click', function() {
+					selectedMarker = this;
+					
+					getDirections(selectedMarker);
+				});
+			});
+		}
+	});
+});
+
 $('.gradientmenu').click(function(){
-	console.log('clear');
-	
 	for (var i = 0; i < markersArray.length; i++ ) {
      markersArray[i].setMap(null);
    }
@@ -337,6 +357,11 @@ function secondsTimeSpanToHMS(s) {
 $('#map_open').click(function() {
 	$('.side-bar').animate({
 		marginLeft: '-190px'
+	});
+	
+	$('#map_canvas').animate({
+		'width': '100%',
+		'margin-left': '0px'
 	});
 }); 
 
